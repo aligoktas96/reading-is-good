@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: product-service
+
+  cloud:
+    config:
+      profile: native
+      uri: http://config-service:8080
+
+  kafka:
+    consumer:
+      properties:
+        spring.json.trusted.packages: "*"

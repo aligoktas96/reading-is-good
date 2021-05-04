@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: discovery-service
+  profiles:
+    active: native
+  cloud:
+    config:
+      profile: native
+      uri: http://config-service:8080

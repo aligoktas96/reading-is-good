@@ -1,0 +1,205 @@
+{
+  "info": {
+    "_postman_id": "093bd9e9-7877-4370-b4b0-eff0029db3ca",
+    "name": "Reading-is-good",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Order",
+      "item": [
+        {
+          "name": "http://localhost/api/order/create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productID\": 1,\n    \"customerID\": 1,\n    \"amount\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost/api/order/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "order",
+                "create"
+              ]
+            },
+            "description": "Create new order endpoint"
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost/api/order/customer/CUSTOMER_ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productID\": 1,\n    \"customerID\": 1,\n    \"amount\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost/api/order/customer/CUSTOMER_ID",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "order",
+                "customer",
+                "CUSTOMER_ID"
+              ]
+            },
+            "description": "Create new order endpoint"
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost/api/order/ORDER_ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productID\": 1,\n    \"customerID\": 1,\n    \"amount\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost/api/order/ORDER_ID",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "order",
+                "ORDER_ID"
+              ]
+            },
+            "description": "Create new order endpoint"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "http://localhost:80/api/product/create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\n{\n    \"name\":  \"Clean Code\",\n    \"author\": \"Robert Cecil Martin\",\n    \"price\": 250,\n    \"stock\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:80/api/product/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "80",
+              "path": [
+                "api",
+                "product",
+                "create"
+              ]
+            },
+            "description": "Product create endpoint"
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:80/api/product/PRODUCT_ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:80/api/product/PRODUCT_ID",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "80",
+              "path": [
+                "api",
+                "product",
+                "PRODUCT_ID"
+              ]
+            },
+            "description": "Get product by productID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "item": [
+        {
+          "name": "http://localhost:80/api/customer/register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\":\"aligoktas\",\n    \"password\":\"pass\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:80/api/customer/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "80",
+              "path": [
+                "api",
+                "customer",
+                "register"
+              ]
+            },
+            "description": "New customer registiration endpoint"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

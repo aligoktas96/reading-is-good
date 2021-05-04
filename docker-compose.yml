@@ -1,0 +1,131 @@
+version: '3.1'
+
+services:
+  product-mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=products
+      - MYSQL_USER=getir
+      - MYSQL_ROOT_PASSWORD=getir
+      - MYSQL_PASSWORD=getir
+    ports:
+      - "3307:3306"
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+
+  order-mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=orders
+      - MYSQL_USER=getir
+      - MYSQL_ROOT_PASSWORD=getir
+      - MYSQL_PASSWORD=getir
+    ports:
+      - "3308:3306"
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+
+  customer-mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=customers
+      - MYSQL_USER=getir
+      - MYSQL_ROOT_PASSWORD=getir
+      - MYSQL_PASSWORD=getir
+    ports:
+      - "3309:3306"
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+
+  config-service:
+    image: config-service:latest
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  discovery-service:
+    image: discovery-service:latest
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      config-service:
+        condition: service_healthy
+
+  api-gateway-service:
+    image: api-gateway-service:latest
+    ports:
+      - "80:80"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:80/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+
+  order-service:
+    image: order-service:latest
+    depends_on:
+      api-gateway-service:
+        condition: service_healthy
+    links:
+      - order-mysql
+      - kafka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://order-mysql/orders
+      SPRING_DATASOURCE_USERNAME: getir
+      SPRING_DATASOURCE_PASSWORD: getir
+
+
+  product-service:
+    image: product-service:latest
+    depends_on:
+      api-gateway-service:
+        condition: service_healthy
+    links:
+      - product-mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://product-mysql/products
+      SPRING_DATASOURCE_USERNAME: getir
+      SPRING_DATASOURCE_PASSWORD: getir
+
+  customer-service:
+    image: customer-service:latest
+    depends_on:
+      api-gateway-service:
+        condition: service_healthy
+    links:
+      - customer-mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://customer-mysql/customers
+      SPRING_DATASOURCE_USERNAME: getir
+      SPRING_DATASOURCE_PASSWORD: getir
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CREATE_TOPICS: "newOrder:1:1,updateOrder:1:1"
